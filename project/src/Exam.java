@@ -2,10 +2,10 @@ import java.io.Serializable;
 
 public class Exam implements Serializable{
 	private String name;
-	private int rawScore;
-	private int percentage;
+	private double rawScore;
+	private double percentage;
 	
-	public Exam(String name, int rawScore,int percentage) {
+	public Exam(String name,double rawScore,double percentage) {
 		super();
 		this.name = name;
 		this.rawScore = rawScore;
@@ -20,24 +20,24 @@ public class Exam implements Serializable{
 		this.name = name;
 	}
 	
-	public int getScore() {
+	public double getScore() {
 		return rawScore;
 	}
 	
-	public void setScore(int rawScore) {
+	public void setScore(double rawScore) {
 		this.rawScore = rawScore;
 	}
 	
-	public int getPercentage() {
+	public double getPercentage() {
 		return percentage;
 	}
 
-	public void setPercentage(int percentage) {
+	public void setPercentage(double percentage) {
 		this.percentage = percentage;
 	}
 
 	public String toString(){
-		return name +": rawScore "+rawScore+" percentage "+percentage; 
+		return name +": Raw score = "+rawScore+ " Percentage = "+percentage; 
 	}
 
 }

@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import javax.swing.table.TableModel;
 
 public class CourseDetailController implements ActionListener {
-	private CourseDetailForm cdf;
+	private CourseDetailForm form;
 	private Course course;
+
 	public CourseDetailController(Course course) {
-		cdf = new CourseDetailForm(course.getExamDetailList(),this);
+		form = new CourseDetailForm(course.getExamDetailList(),this);
 		this.course = course;
 	}
 
@@ -16,22 +17,21 @@ public class CourseDetailController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand()){
 			case "ok" : {
-				if(cdf.isValidInput(cdf.getTableModel())){
-					TableModel model = cdf.getTableModel();
+				if(form.isValidInput(form.getTableModel())){
+					TableModel model = form.getTableModel();
 					int round = model.getRowCount();
 					ArrayList<Exam> examList = new ArrayList<>();
 					for(int i=0;i<round;i++){
-						examList.add(new Exam((String)model.getValueAt(i, 0), Integer.parseInt((String)model.getValueAt(i, 1)) , Integer.parseInt((String)model.getValueAt(i, 2))));
+						examList.add(new Exam((String)model.getValueAt(i, 0), Double.parseDouble((String)model.getValueAt(i, 1)) , Double.parseDouble((String)model.getValueAt(i, 2))));
 					}
 					course.setExamDetailList(examList);
-					
-					//System.out.println(examList);
-					cdf.dispose();
+					form.dispose();
 				}
 				
 			}
 			break;
-			case "cancel" :  cdf.dispose();
+			case "cancel" :  form.dispose();
+			
 		}
 		
 	}

@@ -1,9 +1,16 @@
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Course implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
-	private String description;
 	private ArrayList<Exam> examDetailList;
 	private ArrayList<Student> studentList;
 	 
@@ -19,14 +26,6 @@ public class Course implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public ArrayList<Exam> getExamDetailList() {
@@ -60,6 +59,21 @@ public class Course implements Serializable{
 		}
 	}
 	
+//	public void saveCourseState() {
+//		File folder = new File("C:\\test\\course");
+//		if(!folder.exists()||!folder.isDirectory()){
+//			folder.mkdir();
+//		}
+//		File file = new File(folder,name+".dat");
+//		try (FileOutputStream fileOut = new FileOutputStream(file);
+//				ObjectOutputStream objectOut = new ObjectOutputStream(fileOut)){
+//				objectOut.writeObject(this);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
 //	public String toString(){
 //		String tmp = name+"\n";
 //		tmp+="Standard : "+examDetailList+"\n";
@@ -73,6 +87,6 @@ public class Course implements Serializable{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return name +":" +description;
+		return name;
 	}
 }

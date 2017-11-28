@@ -1,17 +1,19 @@
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -21,115 +23,86 @@ import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
 public class CourseDetailForm extends JFrame {
-	private JButton ok = new JButton("OK");
-	private JButton cancel = new JButton("Cancel");
-	private JPanel panel;
-	private JTable table;
+	String[] headers = { "Requirement", "Total Score", "Percentage%" };
+	JPanel pane = new JPanel();
+	JButton okBtn;
+	JButton ccBtn;
+	JTable table;
 
-	public CourseDetailForm(ArrayList<Exam> examDetailList, ActionListener action) {
-		CourseDetailForm edit = this;
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	public CourseDetailForm(final ArrayList<Exam> examDetailList, final ActionListener action) {
+		
+		try {
+			okBtn = new JButton(new ImageIcon(
+					ImageIO.read(getClass().getResource("okBtn.png")).getScaledInstance(60, 30, Image.SCALE_DEFAULT)));
+			ccBtn = new JButton(new ImageIcon(
+					ImageIO.read(getClass().getResource("ccBtn.png")).getScaledInstance(90, 30, Image.SCALE_DEFAULT)));
+			LayoutManager boxL = new BoxLayout(pane, BoxLayout.Y_AXIS);
+			pane.setLayout(boxL);
+			pane.setBackground(Color.WHITE);
+			int num = 0;
+			while (true) {
+				try {
+					String tmp = JOptionPane.showInputDialog(null, "Enter Number of requirement");
 
-		int num;
-
-		while (true) {
-			try {
-				num = Integer.parseInt(JOptionPane.showInputDialog("Enter Number of requirement", null));
-				break;
-			} catch (NumberFormatException e3) {
-				JOptionPane.showMessageDialog(null, "Input must be integer");
+					if (tmp == null) {
+						return;
+					} else {
+						num = Integer.parseInt(tmp);
+					}
+					break;
+				} catch (NumberFormatException e3) {
+					JOptionPane.showMessageDialog(null, "Input must be integer");
+				}
 			}
+			String[] headers = { "Requirement", "Total Score", "Percentage%" };
+			// String[][] data = new String[num][headers.length];
+			table = new JTable(new String[num][headers.length], headers);
+			table.getTableHeader().setReorderingAllowed(false);
+			for (int i = 0; i < table.getRowCount() && i < examDetailList.size(); i++) {
+				table.setValueAt(examDetailList.get(i).getName(), i, 0);
+				table.setValueAt(examDetailList.get(i).getScore() + "", i, 1);
+				table.setValueAt(examDetailList.get(i).getPercentage() + "", i, 2);
+			}
+			JScrollPane scrPane = new JScrollPane(table);
+			scrPane.setMaximumSize(new Dimension(400, 300));
+			table.setAlignmentX(Component.CENTER_ALIGNMENT);
+			okBtn.setBorderPainted(false);
+			okBtn.setContentAreaFilled(false);
+			okBtn.setFocusPainted(false);
+			okBtn.setOpaque(false);
+			okBtn.setPressedIcon(new ImageIcon(
+					ImageIO.read(getClass().getResource("pressedOkBtn.png")).getScaledInstance(60, 30, Image.SCALE_DEFAULT)));
+			okBtn.addActionListener(action);
+			okBtn.setActionCommand("ok");
+			ccBtn.setBorderPainted(false);
+			ccBtn.setContentAreaFilled(false);
+			ccBtn.setFocusPainted(false);
+			ccBtn.setOpaque(false);
+			ccBtn.setPressedIcon(new ImageIcon(ImageIO.read(getClass().getResource("pressedCcBtn.png"))
+					.getScaledInstance(90, 30, Image.SCALE_DEFAULT)));
+			ccBtn.addActionListener(action);
+			ccBtn.setActionCommand("cancel");
+			JPanel btnPane = new JPanel(new FlowLayout());
+			btnPane.setMaximumSize(new Dimension(400, 100));
+			btnPane.setBackground(Color.white);
+			btnPane.add(okBtn);
+			btnPane.add(Box.createHorizontalBox());
+			btnPane.add(ccBtn);
+			pane.add(Box.createRigidArea(new Dimension(0, 50)));
+			pane.add(scrPane);
+			pane.add(Box.createRigidArea(new Dimension(0, 20)));
+			pane.add(btnPane);
+			add(pane);
+			setTitle("Add criterial score");
+			setSize(800, 600);
+			setResizable(false);
+			setVisible(true);
+			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2,
+					(Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		String[] headers = { "Requirement", "Total Score", "Percentage%" };
-		// String[][] data = new String[num][headers.length];
-
-		table = new JTable(new String[num][headers.length], headers);
-		table.getTableHeader().setReorderingAllowed(false);
-
-		for (int i = 0; i < table.getRowCount() && i < examDetailList.size(); i++) {
-			table.setValueAt(examDetailList.get(i).getName(), i, 0);
-			table.setValueAt(examDetailList.get(i).getScore() + "", i, 1);
-			table.setValueAt(examDetailList.get(i).getPercentage() + "", i, 2);
-
-		}
-
-		JPanel panel2 = new JPanel();
-
-		panel.add(new JScrollPane(table));
-		panel2.add(ok);
-		panel2.add(cancel);
-		panel.add(panel2);
-		ok.addActionListener(action);
-		ok.setActionCommand("ok");
-
-		// ok.addActionListener(new ActionListener() {
-		//
-		// @Override
-		// public void actionPerformed(ActionEvent e) {
-		// // TODO Auto-generated method stub
-		//
-		//
-
-		// try {
-		// for (int i = 0; i < table.getRowCount(); i++) {
-		// totalPercent += Integer.parseInt((String) table.getValueAt(i, 2));
-		// }
-		//
-		// // check column 1 format
-		// for (int i = 0; i < table.getRowCount(); i++) {
-		// Integer.parseInt((String) table.getValueAt(i, 1));
-		// }
-		//
-		// } catch (NumberFormatException e1) {
-		// JOptionPane.showMessageDialog(null, "Total Score and Percentage must be
-		// integer");
-		// return;
-		// }
-		//
-		//
-		//
-
-		// File file = new File("output.txt");
-		// try {
-		// file.createNewFile();
-		// } catch (IOException e2) {
-		// // TODO Auto-generated catch block
-		// e2.printStackTrace();
-		// }
-		// StringBuilder builder = new StringBuilder();
-		//
-		// try (Writer writer = new OutputStreamWriter(new FileOutputStream(file),
-		// StandardCharsets.UTF_8)) {
-		// for (int i = 0; i < table.getRowCount(); i++) {
-		// for (int j = 0; j < table.getColumnCount(); j++) {
-		// builder.append(table.getValueAt(i, j));
-		// builder.append(",");
-		// }
-		// builder.append("\n");
-		// }
-		// writer.write(builder.toString());
-		//
-		// } catch (IOException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-		//
-		// JOptionPane.showMessageDialog(null, "Done");
-		// edit.dispose();
-		//
-		// }
-		// });
-
-		cancel.addActionListener(action);
-		cancel.setActionCommand("cancel");
-		this.setContentPane(panel);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.pack();
-		setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - getSize().width) / 2,
-				(Toolkit.getDefaultToolkit().getScreenSize().height - getSize().height) / 2);
-		this.setTitle("GridLayout Frame");
-		this.setVisible(true);
 
 	}
 
@@ -139,8 +112,8 @@ public class CourseDetailForm extends JFrame {
 
 	public boolean isValidInput(TableModel model) {
 
-		return checkAllCellIsFilled(model)  && checkIsIntegerInRow1and2(model)
-				&& checkRow1Row2IsLessThanZero(model) && checkPercent(model);
+		return checkAllCellIsFilled(model) && checkIsIntegerInRow1and2(model) && checkRow1Row2IsLessThanZero(model)
+				&& checkPercent(model);
 	}
 
 	public static boolean checkAllCellIsFilled(TableModel model) {
@@ -157,14 +130,14 @@ public class CourseDetailForm extends JFrame {
 
 	public static boolean checkPercent(TableModel model) {
 
-		if(checkIsIntegerInRow1and2(model) == false){
+		if (checkIsIntegerInRow1and2(model) == false) {
 			return false;
 		}
-		
-		int totalPercent = 0;
+
+		double totalPercent = 0;
 
 		for (int i = 0; i < model.getRowCount(); i++) {
-			totalPercent += Integer.parseInt((String) model.getValueAt(i, 2));
+			totalPercent += Double.parseDouble((String) model.getValueAt(i, 2));
 		}
 
 		if (totalPercent != 100) {
@@ -181,16 +154,16 @@ public class CourseDetailForm extends JFrame {
 
 			// check column 1 format
 			for (int i = 0; i < model.getRowCount(); i++) {
-				Integer.parseInt((String) model.getValueAt(i, 1));
+				Double.parseDouble((String) model.getValueAt(i, 1));
 			}
 
 			// check column 2 format
 			for (int i = 0; i < model.getRowCount(); i++) {
-				Integer.parseInt((String) model.getValueAt(i, 2));
+				Double.parseDouble((String) model.getValueAt(i, 2));
 			}
 
 		} catch (NumberFormatException e1) {
-			JOptionPane.showMessageDialog(null, "Total Score and Percentage must be integer");
+			JOptionPane.showMessageDialog(null, "Total Score and Percentage must be number");
 			return false;
 		}
 
@@ -204,7 +177,7 @@ public class CourseDetailForm extends JFrame {
 
 		// check column 1 value
 		for (int i = 0; i < model.getRowCount(); i++) {
-			if (Integer.parseInt((String) model.getValueAt(i, 1)) <= 0) {
+			if (Double.parseDouble((String) model.getValueAt(i, 1)) <= 0) {
 				JOptionPane.showMessageDialog(null, "Total Score and Percentage must be positive");
 				return false;
 			}
@@ -212,7 +185,7 @@ public class CourseDetailForm extends JFrame {
 
 		// check column 2 value
 		for (int i = 0; i < model.getRowCount(); i++) {
-			if (Integer.parseInt((String) model.getValueAt(i, 2)) <= 0) {
+			if (Double.parseDouble((String) model.getValueAt(i, 2)) <= 0) {
 				JOptionPane.showMessageDialog(null, "Total Score and Percentage must be positive");
 				return false;
 			}
@@ -220,4 +193,5 @@ public class CourseDetailForm extends JFrame {
 
 		return true;
 	}
+
 }

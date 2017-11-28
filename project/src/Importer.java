@@ -15,7 +15,6 @@ public class Importer {
 	private File file;
 
 	public Importer() {
-		
 		chooser = new JFileChooser();
 		chooser.setDialogTitle("Choose file to import");
 		chooser.setApproveButtonText("Import");
@@ -81,14 +80,10 @@ public class Importer {
 		}
 		
 		String[] tmp = file.getName().split("\\.");
-
-		
 		if(!tmp[tmp.length-1].equals("csv")){
-			System.out.println("not csv");
+			JOptionPane.showMessageDialog(null, "File type must be .csv");
 			return false;
-		}
-		System.out.println("csv");
-		
+		}		
 		return true;
 		
 	}
@@ -109,6 +104,7 @@ public class Importer {
 			scanner.close();
 			
 			if (valid == false) {
+				JOptionPane.showMessageDialog(null, "File must contain student id");
 				return false;
 			}
 		} catch (FileNotFoundException e1) {

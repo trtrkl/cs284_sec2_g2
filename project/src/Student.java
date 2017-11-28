@@ -6,11 +6,13 @@ public class Student implements Serializable{
 	//private String name;
 	private String email;
 	private ArrayList<Exam> examList;
+	private double sum;
 	
 	public Student(String id,String email) {
 		this.id = id;
 		this.email = email;
 		examList = new ArrayList<>();
+		sum=0;
 	}
 	
 	public Student(String id) {
@@ -52,6 +54,14 @@ public class Student implements Serializable{
 		return tmp;
 	}
 	
+	public double getSum() {
+		return sum;
+	}
+
+	public void setSum(double sum) {
+		this.sum = sum;
+	}
+
 	public String toString(){
 		String tmp = id+" "+ examList;
 		return tmp;

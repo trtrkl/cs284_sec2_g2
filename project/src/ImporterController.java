@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 public class ImporterController {
 	
 	public ImporterController(Course course) {
@@ -10,7 +12,6 @@ public class ImporterController {
 				studentList.add(new Student(id));
 			}
 			course.setStudentList(studentList);
-			System.out.println(studentList);
 		}
 	}
 }
