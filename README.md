@@ -1,3 +1,2 @@
 # cs284_sec2_g2
-รัน genuser ก่อนเมื่อใช้ครั้งแรกในเครื่องนั้น
-แล้วจึงค่อยรัน projectMain
+รัน ProjectFinale ได้เลย
